@@ -1,0 +1,56 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<script type="module">
+
+import { sleep } from "https://code4sabae.github.io/js/sleep.js";
+
+const fix0 = (n, beam) => {
+  if (beam === 0) {
+    return n;
+  }
+  const s = "000000000000000000000000000" + n;
+  return s.substring(s.length - beam);
+};
+
+const waitAudioLoad = async (audio) => new Promise(resolve => audio.addEventListener('loadeddata', resolve));
+
+const makeFile = (set, n) => {
+  return set[0] + fix0(n, set[1]) + set[2];
+};
+
+const imgset = ["image/20201030-AsiaOpenDataPartnership-Japan-sec.", 3, ".jpeg"];
+const soundset = ["sound/", 0, ".aac"];
+const npage = 32;
+
+btn.onclick = async () => {
+  btn.disabled = true;
+  for (let i = 1; i <= npage; i++) {
+    const imgfn = makeFile(imgset, i);
+    img.src = imgfn;
+
+    const audiofn = makeFile(soundset, i);
+    const audio = new Audio(audiofn);
+    await waitAudioLoad(audio);
+
+    audio.play();
+    console.log(audio.duration);
+    await sleep(audio.duration * 1000 + 500);
+  }
+  btn.disabled = false;
+};
+</script>
+<style>
+body {
+  margin: 1em 0;
+  text-align: center;
+}
+#img {
+  width: 100vw;
+  margin-top: .5em;
+}
+</style>
+</head>
+<body>
+  <button id="btn">click to start</button>
+  <img id="img">
+</body>
+</html>
